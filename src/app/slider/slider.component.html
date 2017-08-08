@@ -1,0 +1,15 @@
+<div fxLayout="row">
+  <div style="flex: 1 1 0px;">{{label}}</div>
+  <div style="flex: 3 1 0px;" fxLayout="row">
+    <md-slider
+        [max]="max"
+        [min]="min"
+        [step]="step"
+        thumbLabel
+        fxFlex
+        [(ngModel)]="value"
+        (change)="sliderChanged($event)">
+    </md-slider>
+    <ng-content></ng-content>
+  </div>
+</div>

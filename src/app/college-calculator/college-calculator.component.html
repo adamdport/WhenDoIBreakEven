@@ -1,5 +1,5 @@
 <h1>College is expensive. When will you break even?</h1>
-<p>Education generally increases salaries. Between tuition costs and years of lost income, however, it might not be as fruitful as you thought. This calculator will estimate the age at which you will break even.
+<!-- <p>Education generally increases salaries. Between tuition costs and years of lost income, however, it might not be as fruitful as you thought. This calculator will estimate the age at which you will break even.
 <p>Say you have two options:
 <ol>
   <li>
@@ -9,4 +9,22 @@
     You could spend <span mdTooltip="$120000">$30k/yr to school to school for 4 years</span>. After graduation, you earn <span mdTooltip="$300,000">$50k/yr for 6 years</span>. Over the same 10 years, you've earned <span mdTooltip="$300000-120000">$180000</span>.
   </li>
 </ol>
-In the scenario above, the person would break even a little after 10 years. When will you break even?
+In the scenario above, the person would break even a little after 10 years. When will you break even? -->
+
+<div>
+  <slider max="30" min="5" step="0.5" [(value)]="uneducated.startingWage"
+  label="What is your starting salary without an education?">
+    {{uneducated.startingWage | currency:'USD':true}}/hour
+  </slider>
+
+  <slider max="10" min="0" step="0.5" [(value)]="uneducated.raise"
+  label="What kind of raises would you expect?">
+    {{uneducated.raise}}%/year
+  </slider>
+
+  <slider max="50" min="10" step="0.5" [(value)]="uneducated.cap"
+  label="At what wage would you stop getting raises?">
+    {{uneducated.cap | currency:'USD':true}}/hour
+  </slider>
+
+</div>
