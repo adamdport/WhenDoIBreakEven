@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import 'hammerjs';
-import {MdToolbarModule, MdButtonModule, MdSliderModule, MdTooltipModule, MdGridListModule} from '@angular/material';
+import {MatToolbarModule, MatButtonModule, MatSliderModule, MatTooltipModule, MatGridListModule} from '@angular/material';
 import { CollegeCalculatorComponent } from './college-calculator/college-calculator.component'
 
 import { AppComponent } from './app.component';
@@ -30,7 +30,7 @@ const appRoutes: Routes = [
     HttpModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    MdToolbarModule, MdButtonModule, MdSliderModule, MdTooltipModule, MdGridListModule
+    MatToolbarModule, MatButtonModule, MatSliderModule, MatTooltipModule, MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
