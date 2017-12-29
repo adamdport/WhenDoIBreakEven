@@ -13,7 +13,7 @@ In the scenario above, the person would break even a little after 10 years. When
 <form #collegeCalcForm="ngForm">
   <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
 
-    <div class="inputs" fxFlex="100" [formGroup]="common">
+    <div class="inputs" fxFlex="100" [formGroup]="formGroup.get('common')">
       <div>
         <span>At what age would you start school?</span>
         <mat-form-field>
@@ -22,7 +22,7 @@ In the scenario above, the person would break even a little after 10 years. When
       </div>
     </div>
 
-    <div class="inputs uneducated" fxFlex="50" [formGroup]="uneducated">
+    <div class="inputs uneducated" fxFlex="50" [formGroup]="formGroup.get('uneducated')">
       <h3>Path A: start working immediately, don't go to college</h3>
       <div>
         <span>What is your starting salary without an education?</span>
@@ -46,7 +46,7 @@ In the scenario above, the person would break even a little after 10 years. When
     <div class="inputs educated" fxFlex="50" >
       <h3>Path B: Go to college before starting work</h3>
 
-      <div [formGroup]="educated">
+      <div [formGroup]="formGroup.get('educated')">
         <div>
           <span>What is your starting salary with an education?</span>
           <mat-form-field>
@@ -64,7 +64,7 @@ In the scenario above, the person would break even a little after 10 years. When
           </mat-form-field>
         </div>
       </div>
-      <div [formGroup]="school">
+      <div [formGroup]="formGroup.get('school')">
         <div>
           <span>How much would school cost?</span>
           <mat-form-field>
@@ -84,9 +84,10 @@ In the scenario above, the person would break even a little after 10 years. When
       </div>
     </div>
 
-    <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+    <div *ngIf="lineChartData.length" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
       <div class="spacer" fxFlex></div>
-      <h1 fxFlex>You'll break even at age {{breakEvenAge}}</h1>
+      <h1 fxFlex *ngIf="breakEvenAge">You'll break even at age {{breakEvenAge}}</h1>
+      <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>
       <canvas baseChart
               [datasets]="lineChartData"
               [labels]="lineChartLabels"
