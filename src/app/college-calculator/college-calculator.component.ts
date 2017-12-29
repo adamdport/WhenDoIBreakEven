@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-college-calculator',
@@ -10,42 +12,56 @@ export class CollegeCalculatorComponent implements OnInit {
   lineChartData:Array<any> = [];
   lineChartLabels:Array<any> = [];
   breakEvenAge;
+  common: FormGroup;
+  uneducated: FormGroup;
+  educated: FormGroup;
+  school: FormGroup;
 
-  common = {
-    age: 18
+  constructor( private fb: FormBuilder ) {
+    this.common = this.fb.group({
+      age: 18
+    });
+    this.uneducated = this.fb.group({
+      startingWage: 9,
+      raise: 2
+    });
+    this.educated = this.fb.group({
+      startingWage: 15,
+      raise: 2
+    });
+    this.school = this.fb.group({
+      cost: 30000,
+      duration: 4
+    });
   }
-  uneducated = {
-    startingWage: 9,
-    raise: 2
-  };
-  educated = {
-    startingWage: 15,
-    raise: 2
-  };
-  school = {
-    cost: 30000,
-    duration: 4
-  }
-  constructor() { }
 
   ngOnInit() {
     this.buildChart();
+    Observable.merge(
+      this.common.valueChanges,
+      this.uneducated.valueChanges,
+      this.educated.valueChanges,
+      this.school.valueChanges)
+      .debounceTime(500)
+      .subscribe(() => this.buildChart());
   }
 
   buildChart(){
     let uneducated={
       total: 0,
       data: [],
-      wage: this.uneducated.startingWage
+      wage: this.uneducated.get('startingWage').value
     }
     let educated ={
       total: 0,
       data: [],
-      wage: this.educated.startingWage
+      wage: this.educated.get('startingWage').value
     }
     let breakEvenData = [];
+    this.lineChartLabels = [];
+    this.breakEvenAge = undefined;
 
-    for(let age = this.common.age; age < 70; age++){
+    for(let age = this.common.get('age').value; age < 70; age++){
       this.lineChartLabels.push(age);
       uneducated.data.push(uneducated.total);
       educated.data.push(educated.total);
@@ -57,15 +73,15 @@ export class CollegeCalculatorComponent implements OnInit {
       }
 
       uneducated.total = uneducated.total + this.getYearlySalary(uneducated.wage);
-      uneducated.wage = uneducated.wage + (uneducated.wage * this.uneducated.raise / 100);
+      uneducated.wage = uneducated.wage + (uneducated.wage * this.uneducated.get('raise').value / 100);
 
-      if(age < this.common.age + this.school.duration){
+      if(age < this.common.get('age').value + this.school.get('duration').value){
         //in school
-        educated.total = educated.total - this.school.cost;
+        educated.total = educated.total - this.school.get('cost').value;
       }else{
         //after graduation
         educated.total = educated.total + this.getYearlySalary(educated.wage);
-        educated.wage = educated.wage + (educated.wage * this.educated.raise / 100);
+        educated.wage = educated.wage + (educated.wage * this.educated.get('raise').value / 100);
       }
     }
     this.lineChartData = [
