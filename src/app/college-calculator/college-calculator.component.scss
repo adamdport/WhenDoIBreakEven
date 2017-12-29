@@ -1,12 +1,24 @@
-.school{
-  background-color: lightblue;
+.inputs{
   padding: 10px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: transparent;
 }
 
-.no.school{
-  background-color: lightyellow;
+.inputs.school{
+  border-color: rgba(54, 162, 235, .4);
+}
+
+.inputs.noschool{
+  border-color: rgba(255, 99, 132, .4);
 }
 
 mat-form-field{
   width: 100px;
+}
+
+.spacer{
+  border-bottom: 1px solid lightgrey;
+  margin: 10px 0;
+  width: 100%;
 }

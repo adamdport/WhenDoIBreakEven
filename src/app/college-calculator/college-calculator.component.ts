@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-college-calculator',
@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./college-calculator.component.scss']
 })
 export class CollegeCalculatorComponent implements OnInit {
+  @ViewChild('collegeCalcForm') collegeCalcForm;
   lineChartData:Array<any> = [];
   lineChartLabels:Array<any> = [];
+  breakEvenAge;
 
   common = {
     age: 18
@@ -41,11 +43,18 @@ export class CollegeCalculatorComponent implements OnInit {
       data: [],
       wage: this.educated.startingWage
     }
+    let breakEvenData = [];
 
     for(let age = this.common.age; age < 70; age++){
       this.lineChartLabels.push(age);
       uneducated.data.push(uneducated.total);
       educated.data.push(educated.total);
+      if (!this.breakEvenAge && educated.total > uneducated.total){
+        this.breakEvenAge = age;
+        breakEvenData.push(educated.total);
+      }else{
+        breakEvenData.push(null);
+      }
 
       uneducated.total = uneducated.total + this.getYearlySalary(uneducated.wage);
       uneducated.wage = uneducated.wage + (uneducated.wage * this.uneducated.raise / 100);
@@ -62,6 +71,7 @@ export class CollegeCalculatorComponent implements OnInit {
     this.lineChartData = [
       {data: uneducated.data, label: 'Without school'},
       {data: educated.data, label: 'With school'},
+      {data: breakEvenData, label: 'Break Even Age', pointRadius: 20}
     ];
   }
 

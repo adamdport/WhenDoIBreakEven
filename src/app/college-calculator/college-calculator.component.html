@@ -1,4 +1,4 @@
-<h1>College is expensive. When will you break even?</h1>
+<h1>College is expensive. When do you break even?</h1>
 <!-- <p>Education generally increases salaries. Between tuition costs and years of lost income, however, it might not be as fruitful as you thought. This calculator will estimate the age at which you will break even.
 <p>Say you have two options:
 <ol>
@@ -10,82 +10,89 @@
   </li>
 </ol>
 In the scenario above, the person would break even a little after 10 years. When will you break even? -->
-<div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
+<form #collegeCalcForm="ngForm">
+  <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
 
-  <div class="common" fxFlex="100">
-    <div>
-      <span>At what age would you start school?</span>
-      <mat-form-field>
-        <input matInput max="80"[(value)]="common.age"/>
-      </mat-form-field>
+    <div class="inputs" fxFlex="100">
+      <div>
+        <span>At what age would you start school?</span>
+        <mat-form-field>
+          <input matInput max="80"[(value)]="common.age"/>
+        </mat-form-field>
+      </div>
     </div>
+
+    <div class="inputs noschool" fxFlex="50">
+      <h3>Path A: start working immediately, don't go to college</h3>
+      <div>
+        <span>What is your starting salary without an education?</span>
+        <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput max="30" min="5" step="0.5" [(value)]="uneducated.startingWage"/>
+          <div matSuffix>/hour</div>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span>What kind of raises would you expect?</span>
+        <mat-form-field>
+          <input matInput [(value)]="uneducated.raise"/>
+          <div matSuffix>%/year</div>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="inputs school" fxFlex="50">
+      <h3>Path B: Go to college before starting work</h3>
+
+      <div>
+        <span>What is your starting salary with an education?</span>
+        <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput [(value)]="educated.startingWage"/>
+          <div matSuffix>/hour</div>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span>What kind of raises would you expect?</span>
+        <mat-form-field>
+          <input matInput max="10" min="0" step="0.5" [(value)]="educated.raise"/>
+          <div matSuffix>%/year</div>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span>How much would school cost?</span>
+        <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput [(value)]="school.cost"/>
+          <div matSuffix>/year</div>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span>How long would you be in school for?</span>
+        <mat-form-field>
+          <input matInput [(value)]="school.duration"/>
+          <div matSuffix>years</div>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+      <div class="spacer" fxFlex></div>
+      <h1 fxFlex>You'll break even at age {{breakEvenAge}}</h1>
+      <canvas baseChart
+              [datasets]="lineChartData"
+              [labels]="lineChartLabels"
+              [options]="{responsive: true}"
+              chartType="line">
+      </canvas>
+    </div>
+
   </div>
 
-  <div class="no school" fxFlex="50">
-    <h3>Path A: start working immediately, don't go to college</h3>
-    <div>
-      <span>What is your starting salary without an education?</span>
-      <mat-form-field>
-        <div matPrefix>$</div>
-        <input matInput max="30" min="5" step="0.5" [(value)]="uneducated.startingWage"/>
-        <div matSuffix>/hour</div>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <span>What kind of raises would you expect?</span>
-      <mat-form-field>
-        <div matPrefix>%</div>
-        <input matInput [(value)]="uneducated.raise"/>
-        <div matSuffix>/year</div>
-      </mat-form-field>
-    </div>
-
-  </div>
-
-  <div class="school" fxFlex="50">
-    <h3>Path B: Go to college before starting work</h3>
-
-    <div>
-      <span>What is your starting salary with an education?</span>
-      <mat-form-field>
-        <div matPrefix>$</div>
-        <input matInput [(value)]="educated.startingWage"/>
-        <div matSuffix>/hour</div>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <span>What kind of raises would you expect?</span>
-      <mat-form-field>
-        <div matPrefix>%</div>
-        <input matInput max="10" min="0" step="0.5" [(value)]="educated.raise"/>
-        <div matSuffix>/year</div>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <span>How much would school cost?</span>
-      <mat-form-field>
-        <div matPrefix>$</div>
-        <input matInput [(value)]="school.cost"/>
-        <div matSuffix>/year</div>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <span>How long would you be in school for?</span>
-      <mat-form-field>
-        <input matInput [(value)]="school.duration"/>
-        <div matSuffix>years</div>
-      </mat-form-field>
-    </div>
-
-  </div>
-  <canvas baseChart fxFlex="100"
-          [datasets]="lineChartData"
-          [labels]="lineChartLabels"
-          [options]="{responsive: true}"
-          chartType="line">
-  </canvas>
-</div>
+</form>
