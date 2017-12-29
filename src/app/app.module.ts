@@ -15,8 +15,8 @@ import { ChartsModule } from 'ng2-charts';
 
 
 const appRoutes: Routes = [
-  { path: '', component: CollegeCalculatorComponent },
-  { path: '**', redirectTo: '' }
+  { path: 'college', component: CollegeCalculatorComponent },
+  { path: '**', redirectTo: 'college' }
 ];
 
 @NgModule({

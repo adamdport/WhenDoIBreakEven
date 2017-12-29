@@ -22,3 +22,7 @@ mat-form-field{
   margin: 10px 0;
   width: 100%;
 }
+
+/deep/ input{
+  text-align: center;
+}
