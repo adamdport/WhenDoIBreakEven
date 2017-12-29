@@ -6,11 +6,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import 'hammerjs';
-import {MatToolbarModule, MatButtonModule, MatSliderModule, MatTooltipModule, MatGridListModule} from '@angular/material';
+import {MatToolbarModule, MatButtonModule, MatTooltipModule, MatGridListModule, MatInputModule, MatFormFieldModule} from '@angular/material';
 import { CollegeCalculatorComponent } from './college-calculator/college-calculator.component'
 
 import { AppComponent } from './app.component';
-import { SliderComponent } from './slider/slider.component';
+
+import { ChartsModule } from 'ng2-charts';
+
 
 const appRoutes: Routes = [
   { path: '', component: CollegeCalculatorComponent },
@@ -20,8 +22,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    CollegeCalculatorComponent,
-    SliderComponent
+    CollegeCalculatorComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -30,7 +31,8 @@ const appRoutes: Routes = [
     HttpModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    MatToolbarModule, MatButtonModule, MatSliderModule, MatTooltipModule, MatGridListModule
+    MatToolbarModule, MatButtonModule, MatTooltipModule, MatGridListModule, MatInputModule, MatFormFieldModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
