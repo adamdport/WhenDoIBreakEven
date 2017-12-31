@@ -1,15 +1,4 @@
 <h1>Fuel efficient cars are expensive. When do you break even?</h1>
-<!-- <p>Education generally increases salaries. Between tuition costs and years of lost income, however, it might not be as fruitful as you thought. This calculator will estimate the age at which you will break even.
-<p>Say you have two options:
-<ol>
-  <li>
-    Without going to college, you make $20k/yr. Over 10 years, you earn $200000.
-  </li>
-  <li>
-    You could spend <span matTooltip="$120000">$30k/yr to school to school for 4 years</span>. After graduation, you earn <span matTooltip="$300,000">$50k/yr for 6 years</span>. Over the same 10 years, you've earned <span matTooltip="$300000-120000">$180000</span>.
-  </li>
-</ol>
-In the scenario above, the person would break even a little after 10 years. When will you break even? -->
 <form #carsCalcForm="ngForm">
   <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
 
@@ -80,7 +69,7 @@ In the scenario above, the person would break even a little after 10 years. When
       </div>
     </div>
     <div fxLayoutAlign="center center" fxFlex class="button-container">
-      <button mat-raised-button color="primary" (click)="buildChart()">When will I break even?</button>
+      <button mat-raised-button color="primary" (click)="buildChart()">When do I break even?</button>
     </div>
 
     <div *ngIf="lineChartData.length" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
