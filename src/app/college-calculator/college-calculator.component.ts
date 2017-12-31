@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
 
@@ -35,9 +35,9 @@ export class CollegeCalculatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formGroup.valueChanges
-      .debounceTime(500)
-      .subscribe(() => this.buildChart());
+    // this.formGroup.valueChanges
+    //   .debounceTime(500)
+    //   .subscribe(() => this.buildChart());
   }
 
   buildChart(){

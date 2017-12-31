@@ -5,11 +5,11 @@
   border-color: transparent;
 }
 
-.inputs.educated{
+.inputs.inefficient{
   border-color: rgba(54, 162, 235, .4);
 }
 
-.inputs.uneducated{
+.inputs.efficient{
   border-color: rgba(255, 99, 132, .4);
 }
 
@@ -23,10 +23,15 @@ mat-form-field{
   width: 100%;
 }
 
-/deep/ input{
-  text-align: center;
-}
-
 .button-container{
   margin: 20px 0;
+}
+
+.or{
+  display:inline-block;
+  padding: 0 20px;
+}
+
+/deep/ input{
+  text-align: center;
 }

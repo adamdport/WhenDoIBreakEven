@@ -83,6 +83,9 @@ In the scenario above, the person would break even a little after 10 years. When
         </div>
       </div>
     </div>
+    <div fxLayoutAlign="center center" fxFlex class="button-container">
+      <button mat-raised-button color="primary" (click)="buildChart()">When will I break even?</button>
+    </div>
 
     <div *ngIf="lineChartData.length" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
       <div class="spacer" fxFlex></div>
