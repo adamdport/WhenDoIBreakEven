@@ -17,7 +17,7 @@
     <button mat-raised-button color="primary" (click)="buildButtonClicked()">When do I break even?</button>
   </div>
 
-  <div fxFlex="100">
+  <div fxFlex="100" *ngIf="showChart">
     <ng-content select="[chart]"></ng-content>
   </div>
 

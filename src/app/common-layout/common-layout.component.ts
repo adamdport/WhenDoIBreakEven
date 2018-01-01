@@ -7,6 +7,7 @@ import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 })
 export class CommonLayoutComponent implements OnInit {
   @Output() build = new EventEmitter<void>();
+  showChart:boolean = false;
 
   constructor() { }
 
@@ -15,6 +16,7 @@ export class CommonLayoutComponent implements OnInit {
 
   buildButtonClicked(){
     this.build.emit();
+    this.showChart = true;
   }
 
 }

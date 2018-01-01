@@ -35,9 +35,9 @@ export class CollegeCalculatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.formGroup.valueChanges
-    //   .debounceTime(500)
-    //   .subscribe(() => this.buildChart());
+    this.formGroup.valueChanges.subscribe(() => {
+      this.buildChart();
+    })
   }
 
   buildChart(){

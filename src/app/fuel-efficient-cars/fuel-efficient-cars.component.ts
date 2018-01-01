@@ -35,6 +35,10 @@ export class FuelEfficientCarsComponent implements OnInit{
     this.formGroup.get('common.distanceToWork').valueChanges
       .debounceTime(500)
       .subscribe((newValue) => this.calculateMilesPerYear(newValue));
+
+    this.formGroup.valueChanges.subscribe(() => {
+      this.buildChart();
+    })
   }
 
   calculateMilesPerYear(distanceToWork){
