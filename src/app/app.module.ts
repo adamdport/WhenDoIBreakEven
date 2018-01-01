@@ -14,6 +14,7 @@ import { FuelEfficientCarsComponent } from './fuel-efficient-cars/fuel-efficient
 import { AppComponent } from './app.component';
 
 import { ChartsModule } from 'ng2-charts';
+import { CommonLayoutComponent } from './common-layout/common-layout.component';
 
 
 const appRoutes: Routes = [
@@ -26,7 +27,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     CollegeCalculatorComponent,
-    FuelEfficientCarsComponent
+    FuelEfficientCarsComponent,
+    CommonLayoutComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

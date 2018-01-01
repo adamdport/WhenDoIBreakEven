@@ -1,0 +1,24 @@
+<h1><ng-content select="[title-header]"></ng-content></h1>
+<div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
+
+  <div class="inputs" fxFlex="100">
+    <ng-content select="[common]"></ng-content>
+  </div>
+
+  <div class="inputs first" fxFlex="50">
+    <ng-content select="[first]"></ng-content>
+  </div>
+
+  <div class="inputs second" fxFlex="50">
+    <ng-content select="[second]"></ng-content>
+  </div>
+
+  <div fxLayoutAlign="center center" fxFlex class="button-container">
+    <button mat-raised-button color="primary" (click)="buildButtonClicked()">When do I break even?</button>
+  </div>
+
+  <div fxFlex="100">
+    <ng-content select="[chart]"></ng-content>
+  </div>
+
+</div>

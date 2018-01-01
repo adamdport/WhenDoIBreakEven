@@ -71,7 +71,7 @@ export class FuelEfficientCarsComponent implements OnInit{
     }
     this.lineChartData = [
       {data: efficient.data, label: 'Efficient Car'},
-      {data: inefficient.data, label: 'Inefficient Car'},
+      {data: inefficient.data, label: 'Cheaper Car'},
       {data: breakEvenData, label: 'Break Even Age', pointRadius: 20}
     ];
   }

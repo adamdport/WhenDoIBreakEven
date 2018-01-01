@@ -1,31 +1,41 @@
-<h1>College is expensive. When do you break even?</h1>
-<!-- <p>Education generally increases salaries. Between tuition costs and years of lost income, however, it might not be as fruitful as you thought. This calculator will estimate the age at which you will break even.
-<p>Say you have two options:
-<ol>
-  <li>
-    Without going to college, you make $20k/yr. Over 10 years, you earn $200000.
-  </li>
-  <li>
-    You could spend <span matTooltip="$120000">$30k/yr to school to school for 4 years</span>. After graduation, you earn <span matTooltip="$300,000">$50k/yr for 6 years</span>. Over the same 10 years, you've earned <span matTooltip="$300000-120000">$180000</span>.
-  </li>
-</ol>
-In the scenario above, the person would break even a little after 10 years. When will you break even? -->
-<form #collegeCalcForm="ngForm">
-  <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutWrap>
+<common-layout (build)="buildChart()">
+  <div title-header>College is expensive. When do you break even?</div>
+  <div common [formGroup]="formGroup.get('common')">
+    <div>
+      <span>At what age would you start school?</span>
+      <mat-form-field>
+        <input matInput max="80" type="number" formControlName="age"/>
+      </mat-form-field>
+    </div>
+  </div>
 
-    <div class="inputs" fxFlex="100" [formGroup]="formGroup.get('common')">
-      <div>
-        <span>At what age would you start school?</span>
-        <mat-form-field>
-          <input matInput max="80" type="number" formControlName="age"/>
-        </mat-form-field>
-      </div>
+  <div first [formGroup]="formGroup.get('uneducated')">
+    <h3>Path A: start working immediately, don't go to college</h3>
+    <div>
+      <span>What is your starting salary without an education?</span>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="startingWage"/>
+        <div matSuffix>/hour</div>
+      </mat-form-field>
     </div>
 
-    <div class="inputs uneducated" fxFlex="50" [formGroup]="formGroup.get('uneducated')">
-      <h3>Path A: start working immediately, don't go to college</h3>
+    <div>
+      <span>What kind of raises would you expect?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="raise"/>
+        <div matSuffix>%/year</div>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <div second>
+    <h3>Path B: Go to college before starting work</h3>
+
+    <div [formGroup]="formGroup.get('educated')">
       <div>
-        <span>What is your starting salary without an education?</span>
+        <span>What is your starting salary with an education?</span>
         <mat-form-field>
           <div matPrefix>$</div>
           <input matInput type="number" formControlName="startingWage"/>
@@ -40,65 +50,37 @@ In the scenario above, the person would break even a little after 10 years. When
           <div matSuffix>%/year</div>
         </mat-form-field>
       </div>
-
     </div>
-
-    <div class="inputs educated" fxFlex="50" >
-      <h3>Path B: Go to college before starting work</h3>
-
-      <div [formGroup]="formGroup.get('educated')">
-        <div>
-          <span>What is your starting salary with an education?</span>
-          <mat-form-field>
-            <div matPrefix>$</div>
-            <input matInput type="number" formControlName="startingWage"/>
-            <div matSuffix>/hour</div>
-          </mat-form-field>
-        </div>
-
-        <div>
-          <span>What kind of raises would you expect?</span>
-          <mat-form-field>
-            <input matInput type="number" formControlName="raise"/>
-            <div matSuffix>%/year</div>
-          </mat-form-field>
-        </div>
+    <div [formGroup]="formGroup.get('school')">
+      <div>
+        <span>How much would school cost?</span>
+        <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="cost"/>
+          <div matSuffix>/year</div>
+        </mat-form-field>
       </div>
-      <div [formGroup]="formGroup.get('school')">
-        <div>
-          <span>How much would school cost?</span>
-          <mat-form-field>
-            <div matPrefix>$</div>
-            <input matInput type="number" formControlName="cost"/>
-            <div matSuffix>/year</div>
-          </mat-form-field>
-        </div>
 
-        <div>
-          <span>How long would you be in school for?</span>
-          <mat-form-field>
-            <input matInput type="number" formControlName="duration"/>
-            <div matSuffix>years</div>
-          </mat-form-field>
-        </div>
+      <div>
+        <span>How long would you be in school for?</span>
+        <mat-form-field>
+          <input matInput type="number" formControlName="duration"/>
+          <div matSuffix>years</div>
+        </mat-form-field>
       </div>
     </div>
-    <div fxLayoutAlign="center center" fxFlex class="button-container">
-      <button mat-raised-button color="primary" (click)="buildChart()">When do I break even?</button>
-    </div>
-
-    <div *ngIf="lineChartData.length" fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
-      <div class="spacer" fxFlex></div>
-      <h1 fxFlex *ngIf="breakEvenAge">You'll break even at age {{breakEvenAge}}</h1>
-      <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>
-      <canvas baseChart
-              [datasets]="lineChartData"
-              [labels]="lineChartLabels"
-              [options]="{responsive: true}"
-              chartType="line">
-      </canvas>
-    </div>
-
   </div>
 
-</form>
+  <div chart *ngIf="lineChartData.length" fxLayout="column" fxLayoutAlign="center center">
+    <div class="spacer" fxFlex></div>
+    <h1 fxFlex *ngIf="breakEvenAge">You'll break even at age {{breakEvenAge}}</h1>
+    <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>
+    <canvas baseChart
+            [datasets]="lineChartData"
+            [labels]="lineChartLabels"
+            [options]="{responsive: true}"
+            chartType="line">
+    </canvas>
+  </div>
+
+</common-layout>
