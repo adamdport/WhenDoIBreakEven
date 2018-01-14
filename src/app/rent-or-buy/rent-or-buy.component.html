@@ -1,0 +1,145 @@
+<h1>Houses are expensive. When do you break even?</h1>
+<common-layout (build)="buildChart()">
+  <div common [formGroup]="formGroup.get('common')">
+    <div>
+      <span>How much money would be available for a down payment?</span>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="downPayment"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much is inflation?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="inflation"/>
+        <div matSuffix="">%/year</div>
+      </mat-form-field>
+    </div>
+
+    To compare apples to apples, you'll eventually need to sell your house.
+    <div>
+      <span>After how many years do you sell your home?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="runtime"/>
+        <div matSuffix>years</div>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div first [formGroup]="formGroup.get('rent')">
+    <h3>Path A: Rent a house</h3>
+    <div>
+      <span>How much is rent?</span>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="rent"/>
+        <div matSuffix>/mo</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much interest could you get investing the money that would have gone towards a down payment?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="interest"/>
+        <div matSuffix>%/year</div>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <div second [formGroup]="formGroup.get('buy')">
+    <h3>Path B: Buy a house</h3>
+
+    <div>
+      <span>How much does the house cost?</span>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="price"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>What percentage are closing costs?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="closingCosts"/>
+        <div matSuffix>%</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much are taxes?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="taxes"/>
+        <div matSuffix>%/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much is upkeep?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="upkeep"/>
+        <div matSuffix>%/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much is insurance?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="insurance"/>
+        <div matSuffix>%/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How long is your mortgage?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="mortgageYears"/>
+        <div matSuffix>years</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much interest does your lender charge?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="mortgageRate"/>
+        <div matSuffix>%/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <span>How much are realtor fees?</span>
+      <mat-form-field>
+        <input matInput type="number" formControlName="realtorFees"/>
+        <div matSuffix>%</div>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+
+  <div chart *ngIf="lineChartData.length" fxLayout="column" fxLayoutAlign="center center">
+    <div>Renting costs {{formGroup.get('rent.rent').value | currency:'USD'}}/mo.</div>
+    <div>Buying costs {{calculated.buy.totalMonthly | currency:'USD'}}/mo during your mortgage, broken down as:
+      <ul>
+        <li>Mortgage: {{calculated.buy.monthlyMortgage | currency:'USD'}}</li>
+        <li>Taxes: {{calculated.buy.annualTaxes / 12 | currency:'USD'}}</li>
+        <li>Upkeep: {{calculated.buy.annualUpkeep / 12 | currency:'USD'}}</li>
+        <li>Insurance: {{calculated.buy.annualInsurance / 12 | currency:'USD'}}</li>
+      </ul>
+    </div>
+    <div>To compare apples to apples, we'll take the greater of these two and assume that {{calculated.monthlyAvailable | currency:'USD'}} is available.
+      We'll assume that the difference is invested where it will earn {{formGroup.get('rent.interest').value}}%/yr</div>
+
+    <div class="spacer" fxFlex></div>
+    <h1 fxFlex *ngIf="breakEvenAge">You'll break even after {{breakEvenAge}} years</h1>
+    <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>
+    <canvas baseChart
+            [datasets]="lineChartData"
+            [labels]="lineChartLabels"
+            [options]="{responsive: true}"
+            chartType="line">
+    </canvas>
+  </div>
+
+</common-layout>
