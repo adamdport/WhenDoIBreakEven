@@ -21,7 +21,8 @@ export class RentOrBuyComponent implements OnInit {
       annualUpkeep: null,
       annualInsurance: null,
       annualInterest: null,
-      monthlyMortgage: null
+      monthlyMortgage: null,
+      sellingCosts: null
     }
   };
 
@@ -37,7 +38,7 @@ export class RentOrBuyComponent implements OnInit {
         interest: 8
       }),
       buy: this.fb.group({
-        price: 100000,
+        price: 90000,
         closingCosts: 10,
         taxes: 4,
         upkeep: 1,
@@ -63,6 +64,7 @@ export class RentOrBuyComponent implements OnInit {
     this.calculated.buy.annualUpkeep = this.getYearlyFromPercents(price, ['buy.upkeep']);
     this.calculated.buy.annualInsurance = this.getYearlyFromPercents(price, ['buy.insurance']);
     this.calculated.buy.annualInterest = this.getYearlyFromPercents(price, ['buy.mortgageRate']);
+    this.calculated.buy.sellingCosts = this.getYearlyFromPercents(price, ['buy.realtorFees']);
     this.calculated.buy.monthlyMortgage = this.getMortgagePayment();
 
     this.calculated.buy.closingCosts = this.getYearlyFromPercents(price, ['buy.closingCosts']);
@@ -93,10 +95,18 @@ export class RentOrBuyComponent implements OnInit {
 
     let rent={
       total: this.formGroup.get('common.downPayment').value,
+      inflationAdjustedRent: this.formGroup.get('rent.rent').value,
       data: [],
     }
+
+    let price = this.formGroup.get('buy.price').value;
+    let inflation = this.formGroup.get('common.inflation').value / 100 + 1;
+    let monthlyAvailable = this.calculated.monthlyAvailable;
+
     let buy ={
-      total: -this.formGroup.get('buy.price').value + this.formGroup.get('common.downPayment').value,
+      // We inaccurately charge realtor fees immediately to make the chart's intersection more meaningful.
+      // In reality, they'd be charged when the home sells. TODO: Does inflation make this inaccurate?
+      total: this.formGroup.get('common.downPayment').value - this.getYearlyFromPercents(price, ['buy.closingCosts', 'buy.realtorFees']),
       data: [],
     }
     let breakEvenData = [];
@@ -109,22 +119,33 @@ export class RentOrBuyComponent implements OnInit {
 
       //RENT:
       rent.data.push(rent.total);
+      rent.inflationAdjustedRent = rent.inflationAdjustedRent * inflation;
       rent.total = rent.total
         + (rent.total * (this.formGroup.get('rent.interest').value / 100)) // investment interest
-        + (this.calculated.monthlyAvailable * 12) // available income
-        - (this.formGroup.get('rent.rent').value * 12); // rent
+        + (monthlyAvailable * 12) // available income
+        - (rent.inflationAdjustedRent * 12); // rent
 
-      //buy.data.push(buy.total);
-      // buy.data.push(buy.total - () + );
-      // if (!this.breakEvenAge && efficient.total < inefficient.total){
-      //   this.breakEvenAge = age;
-      //   breakEvenData.push(efficient.total);
-      // }else{
-      //   breakEvenData.push(null);
-      // }
-      //
-      // inefficient.total = inefficient.total + this.getAnnualFuelCost(this.formGroup.get('inefficient.mileage').value);
-      // efficient.total = efficient.total + this.getAnnualFuelCost(this.formGroup.get('efficient.mileage').value);
+      //BUY:
+
+      buy.data.push(buy.total);
+      let buyLosses = ['buy.taxes', 'buy.upkeep', 'buy.insurance'];
+      if (age < this.formGroup.get('buy.mortgageYears').value){
+        buyLosses.push('buy.mortgageRate')
+      }
+      buy.total = buy.total
+        + (monthlyAvailable * 12) // available income
+        - this.getYearlyFromPercents(price,buyLosses);
+
+      //TODO: invest excess
+
+
+      monthlyAvailable = monthlyAvailable * inflation;
+      if (!this.breakEvenAge && buy.total > rent.total){
+        this.breakEvenAge = age;
+        breakEvenData.push(buy.total);
+      }else{
+        breakEvenData.push(null);
+      }
     }
     this.lineChartData = [
       {data: rent.data, label: 'Rent a house'},
