@@ -2,7 +2,7 @@
   <div title-header>College is expensive. When do you break even?</div>
   <div common [formGroup]="formGroup.get('common')">
     <div>
-      <span>At what age would you start school?</span>
+      <label>At what age would you start school?</label>
       <mat-form-field>
         <input matInput max="80" type="number" formControlName="age"/>
       </mat-form-field>
@@ -12,7 +12,7 @@
   <div first [formGroup]="formGroup.get('uneducated')">
     <h3>Path A: start working immediately, don't go to college</h3>
     <div>
-      <span>What is your starting salary without an education?</span>
+      <label>What is your starting salary without an education?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="startingWage"/>
@@ -21,7 +21,7 @@
     </div>
 
     <div>
-      <span>What kind of raises would you expect?</span>
+      <label>What kind of raises would you expect?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="raise"/>
         <div matSuffix>%/year</div>
@@ -35,7 +35,7 @@
 
     <div [formGroup]="formGroup.get('educated')">
       <div>
-        <span>What is your starting salary with an education?</span>
+        <label>What is your starting salary with an education?</label>
         <mat-form-field>
           <div matPrefix>$</div>
           <input matInput type="number" formControlName="startingWage"/>
@@ -44,7 +44,7 @@
       </div>
 
       <div>
-        <span>What kind of raises would you expect?</span>
+        <label>What kind of raises would you expect?</label>
         <mat-form-field>
           <input matInput type="number" formControlName="raise"/>
           <div matSuffix>%/year</div>
@@ -53,7 +53,7 @@
     </div>
     <div [formGroup]="formGroup.get('school')">
       <div>
-        <span>How much would school cost?</span>
+        <label>How much would school cost?</label>
         <mat-form-field>
           <div matPrefix>$</div>
           <input matInput type="number" formControlName="cost"/>
@@ -62,7 +62,7 @@
       </div>
 
       <div>
-        <span>How long would you be in school for?</span>
+        <label>How long would you be in school for?</label>
         <mat-form-field>
           <input matInput type="number" formControlName="duration"/>
           <div matSuffix>years</div>

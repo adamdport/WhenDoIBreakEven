@@ -2,7 +2,7 @@
 <common-layout (build)="buildChart()">
   <div common [formGroup]="formGroup.get('common')">
     <div>
-      <span>How much money would be available for a down payment?</span>
+      <label>How much money would be available for a down payment?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="downPayment"/>
@@ -10,7 +10,7 @@
     </div>
 
     <div>
-      <span>How much is inflation?</span>
+      <label>How much is inflation?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="inflation"/>
         <div matSuffix="">%/year</div>
@@ -21,7 +21,7 @@
   <div first [formGroup]="formGroup.get('rent')">
     <h3>Path A: Rent a house</h3>
     <div>
-      <span>How much is rent?</span>
+      <label>How much is rent?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="rent"/>
@@ -30,7 +30,7 @@
     </div>
 
     <div>
-      <span>How much interest/gains could you get investing the money that would have gone towards home expenses (down payment, repairs, etc)?</span>
+      <label>How much interest/gains could you get investing the money that would have gone towards home expenses (down payment, repairs, etc)?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="interest"/>
         <div matSuffix>%/year</div>
@@ -43,7 +43,7 @@
     <h3>Path B: Buy a house</h3>
 
     <div>
-      <span>How much does the house cost?</span>
+      <label>How much does the house cost?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="price"/>
@@ -51,7 +51,7 @@
     </div>
 
     <div>
-      <span>What percentage are closing costs?</span>
+      <label>What percentage are closing costs?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="closingCosts"/>
         <div matSuffix>%</div>
@@ -59,7 +59,7 @@
     </div>
 
     <div>
-      <span>How much are taxes?</span>
+      <label>How much are taxes?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="taxes"/>
         <div matSuffix>%/year</div>
@@ -67,7 +67,7 @@
     </div>
 
     <div>
-      <span>How much is upkeep?</span>
+      <label>How much is upkeep?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="upkeep"/>
         <div matSuffix>%/year</div>
@@ -75,7 +75,7 @@
     </div>
 
     <div>
-      <span>How much is insurance?</span>
+      <label>How much is insurance?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="insurance"/>
         <div matSuffix>%/year</div>
@@ -83,7 +83,7 @@
     </div>
 
     <div>
-      <span>How long is your mortgage?</span>
+      <label>How long is your mortgage?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="mortgageYears"/>
         <div matSuffix>years</div>
@@ -91,7 +91,7 @@
     </div>
 
     <div>
-      <span>How much interest does your lender charge?</span>
+      <label>How much interest does your lender charge?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="mortgageRate"/>
         <div matSuffix>%/year</div>
@@ -99,7 +99,7 @@
     </div>
 
     <div>
-      <span>How much are realtor fees?</span>
+      <label>How much are realtor fees?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="realtorFees"/>
         <div matSuffix>%</div>

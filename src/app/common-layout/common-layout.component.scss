@@ -13,9 +13,7 @@
   border-color: rgba(255, 99, 132, .4);
 }
 
-/deep/ mat-form-field{
-  width: 100px;
-}
+
 
 .spacer{
   border-bottom: 1px solid lightgrey;
@@ -23,8 +21,18 @@
   width: 100%;
 }
 
-/deep/ input{
-  text-align: center;
+::ng-deep {
+  mat-form-field{
+    width: 100px;
+  }
+
+  input{
+    text-align: center;
+  }
+
+  label{
+    margin-right: 5px;
+  }
 }
 
 .button-container{

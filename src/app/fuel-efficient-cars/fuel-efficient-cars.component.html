@@ -3,7 +3,7 @@
   <div common [formGroup]="formGroup.get('common')">
     <div>
       <span>
-        <span>How far is your drive to work?</span>
+        <label>How far is your drive to work?</label>
         <mat-form-field>
           <input matInput max="80" type="number" formControlName="distanceToWork"/>
           <div matSuffix>miles</div>
@@ -11,14 +11,14 @@
       </span>
       <div class="or">or</div>
       <span>
-        <span>How many miles do you drive a year?</span>
+        <label>How many miles do you drive a year?</label>
         <mat-form-field>
           <input matInput type="number" formControlName="milesPerYear"/>
         </mat-form-field>
       </span>
     </div>
     <div>
-      <span>How much does gas gost?</span>
+      <label>How much does gas gost?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="costPerGallon"/>
@@ -30,7 +30,7 @@
   <div first [formGroup]="formGroup.get('inefficient')">
     <h3>Path A: Cheaper car that gets worse gas mileage</h3>
     <div>
-      <span>How much does the car cost?</span>
+      <label>How much does the car cost?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="cost"/>
@@ -38,7 +38,7 @@
     </div>
 
     <div>
-      <span>What mileage does it get on average?</span>
+      <label>What mileage does it get on average?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="mileage"/>
         <div matSuffix>mpg</div>
@@ -51,7 +51,7 @@
     <h3>Path B: Fuel efficient car</h3>
 
     <div>
-      <span>How much does the car cost?</span>
+      <label>How much does the car cost?</label>
       <mat-form-field>
         <div matPrefix>$</div>
         <input matInput type="number" formControlName="cost"/>
@@ -59,7 +59,7 @@
     </div>
 
     <div>
-      <span>What mileage does it get on average?</span>
+      <label>What mileage does it get on average?</label>
       <mat-form-field>
         <input matInput type="number" formControlName="mileage"/>
         <div matSuffix>mpg</div>
