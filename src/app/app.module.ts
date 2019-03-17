@@ -17,9 +17,9 @@ import { RentOrBuyComponent } from './rent-or-buy/rent-or-buy.component';
 
 
 const appRoutes: Routes = [
-  { path: 'college', component: CollegeCalculatorComponent },
-  { path: 'cars', component: FuelEfficientCarsComponent },
-  { path: 'rentorbuy', component: RentOrBuyComponent },
+  { path: 'college', component: CollegeCalculatorComponent, data: {title: "When does going to college pay off?"} },
+  { path: 'cars', component: FuelEfficientCarsComponent, data: {title: "Should I pay more for fuel efficiency?"} },
+  { path: 'rentorbuy', component: RentOrBuyComponent, data: {title: "Is renting throwing away money?"} },
   { path: '**', redirectTo: 'college' }
 ];
 
