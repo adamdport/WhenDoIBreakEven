@@ -176,8 +176,8 @@ export class RentOrBuyComponent implements OnInit {
       }
     }
     this.lineChartData = [
-      {data: rent.data, label: 'Rent a house'},
       {data: buy.data, label: 'Buy a house'},
+      {data: rent.data, label: 'Rent a house'},
       {data: breakEvenData, label: 'Break Even Age', pointRadius: 20}
     ];
   }

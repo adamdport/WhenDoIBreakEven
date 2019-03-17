@@ -78,8 +78,8 @@ export class CollegeCalculatorComponent implements OnInit {
       }
     }
     this.lineChartData = [
-      {data: uneducated.data, label: 'Without school'},
       {data: educated.data, label: 'With school'},
+      {data: uneducated.data, label: 'Without school'},
       {data: breakEvenData, label: 'Break Even Age', pointRadius: 20}
     ];
   }
