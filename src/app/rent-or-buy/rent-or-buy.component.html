@@ -122,7 +122,7 @@
     </div>
     <div>To compare apples to apples, we'll take the greater of these two and assume that {{calculated.monthlyAvailable | currency:'USD'}} is available.
       We'll assume that the difference is invested where it will earn {{formGroup.get('rent.interest').value}}%/yr</div>
-    <div>Closing costs (while buying) were {{calculated.buy.closingCosts | currency:'USD'}}, and when you sell you'll pay a realtor {{calculated.buy.sellingCosts | currency:'USD'}} (in today's dollars).</div>
+    <div>Closing costs (while buying) are {{calculated.buy.closingCosts | currency:'USD'}}, and when you sell you'll pay a realtor {{calculated.buy.sellingCosts | currency:'USD'}} (in today's dollars).</div>
 
     <div class="spacer" fxFlex></div>
     <h1 fxFlex *ngIf="breakEvenAge">You'll break even after {{breakEvenAge}} years</h1>
