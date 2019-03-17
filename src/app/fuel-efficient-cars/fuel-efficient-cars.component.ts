@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import 'rxjs/add/operator/debounceTime';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-fuel-efficient-cars',
@@ -33,8 +33,9 @@ export class FuelEfficientCarsComponent implements OnInit{
 
   ngOnInit(){
     this.formGroup.get('common.distanceToWork').valueChanges
-      .debounceTime(500)
-      .subscribe((newValue) => this.calculateMilesPerYear(newValue));
+      .pipe(
+        debounceTime(500)
+      ).subscribe((newValue) => this.calculateMilesPerYear(newValue));
 
     this.formGroup.valueChanges.subscribe(() => {
       this.buildChart();

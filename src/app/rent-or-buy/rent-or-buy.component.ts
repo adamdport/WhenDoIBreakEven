@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rent-or-buy',
@@ -39,7 +40,7 @@ export class RentOrBuyComponent implements OnInit {
       }),
       buy: this.fb.group({
         price: 90000,
-        closingCosts: 10,
+        closingCosts: 5,
         taxes: 4,
         upkeep: 1,
         insurance: .25,
@@ -51,7 +52,9 @@ export class RentOrBuyComponent implements OnInit {
   }
 
   ngOnInit(){
-    this.formGroup.valueChanges.debounceTime(500).subscribe(() => {
+    this.formGroup.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(() => {
       this.buildChart();
     })
   }
@@ -80,7 +83,10 @@ export class RentOrBuyComponent implements OnInit {
   }
 
   getMortgagePayment(){
-    let housePrice = this.formGroup.get('buy.price').value - this.formGroup.get('common.downPayment').value;
+    let stickerPrice = this.formGroup.get('buy.price').value
+    let housePrice = stickerPrice
+      - this.formGroup.get('common.downPayment').value;
+      + this.getYearlyFromPercents(stickerPrice, ['buy.closingCosts']);
     let numMonths = this.formGroup.get('buy.mortgageYears').value * 12;
     let monthlyInterest = this.formGroup.get('buy.mortgageRate').value / 100 / 12; //interest is charged annually so it doesn't compound
     return housePrice*(monthlyInterest * Math.pow((1 + monthlyInterest), numMonths))/(Math.pow((1 + monthlyInterest), numMonths) - 1);
@@ -101,12 +107,15 @@ export class RentOrBuyComponent implements OnInit {
 
     let price = this.formGroup.get('buy.price').value;
     let inflation = this.formGroup.get('common.inflation').value / 100 + 1;
-    let monthlyAvailable = this.calculated.monthlyAvailable;
+    let yearlyAvailable = this.calculated.monthlyAvailable * 12;
+    let yearlyMortgage = this.getMortgagePayment() * 12;
 
     let buy ={
       // We inaccurately charge realtor fees immediately to make the chart's intersection more meaningful.
-      // In reality, they'd be charged when the home sells. TODO: Does inflation make this inaccurate?
-      total: this.formGroup.get('common.downPayment').value - this.getYearlyFromPercents(price, ['buy.closingCosts', 'buy.realtorFees']),
+      // In reality, they'd be charged when the home sells. TODO: with inflation, is this inaccurate?
+      total: this.formGroup.get('common.downPayment').value - this.getYearlyFromPercents(price, ['buy.realtorFees']),
+      mortgageRemaining: price - this.formGroup.get('common.downPayment').value + this.getYearlyFromPercents(price, ['buy.closingCosts']),
+      investmentTotal: 0,
       data: [],
     }
     let breakEvenData = [];
@@ -114,7 +123,7 @@ export class RentOrBuyComponent implements OnInit {
     this.breakEvenAge = undefined;
     let runtime = this.formGroup.get('common.runtime').value;
 
-    for(let age = 0; age < runtime; age++){
+    for(let age = 1; age < runtime + 1; age++){
       this.lineChartLabels.push(age);
 
       //RENT:
@@ -122,24 +131,38 @@ export class RentOrBuyComponent implements OnInit {
       rent.inflationAdjustedRent = rent.inflationAdjustedRent * inflation;
       rent.total = rent.total
         + (rent.total * (this.formGroup.get('rent.interest').value / 100)) // investment interest
-        + (monthlyAvailable * 12) // available income
+        + (yearlyAvailable) // available income
         - (rent.inflationAdjustedRent * 12); // rent
 
+
+
       //BUY:
-
       buy.data.push(buy.total);
-      let buyLosses = ['buy.taxes', 'buy.upkeep', 'buy.insurance'];
-      if (age < this.formGroup.get('buy.mortgageYears').value){
-        buyLosses.push('buy.mortgageRate')
+      let investmentInterest = 0;
+      let housePayment;
+      let mortgageInterest = 0;
+      if (buy.mortgageRemaining > 0){ //still have mortgage
+        mortgageInterest = buy.mortgageRemaining * this.formGroup.get('buy.mortgageRate').value / 100;
+        housePayment = Math.min(yearlyAvailable, buy.mortgageRemaining); //pay the payments, or whatever's left. TODO: invest the remainder
+        buy.mortgageRemaining = buy.mortgageRemaining + mortgageInterest - (yearlyMortgage);
+      }else{ //mortgage is paid! Start investing
+        housePayment = 0;
       }
+
+      investmentInterest = buy.investmentTotal * (this.formGroup.get('rent.interest').value / 100);
+      if (yearlyAvailable > housePayment){
+        buy.investmentTotal = buy.investmentTotal + (yearlyAvailable - housePayment);
+      }
+
       buy.total = buy.total
-        + (monthlyAvailable * 12) // available income
-        - this.getYearlyFromPercents(price,buyLosses);
+        + (yearlyAvailable) // available income
+        - this.getYearlyFromPercents(price,['buy.taxes', 'buy.upkeep', 'buy.insurance'])
+        - mortgageInterest
+        + investmentInterest;
 
-      //TODO: invest excess
+      yearlyAvailable = yearlyAvailable * inflation;
+      price = price * inflation;
 
-
-      monthlyAvailable = monthlyAvailable * inflation;
       if (!this.breakEvenAge && buy.total > rent.total){
         this.breakEvenAge = age;
         breakEvenData.push(buy.total);
