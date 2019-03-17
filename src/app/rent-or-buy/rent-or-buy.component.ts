@@ -141,7 +141,7 @@ export class RentOrBuyComponent implements OnInit {
       let mortgageInterest = 0;
       if (buy.mortgageRemaining > 0){ //still have mortgage
         mortgageInterest = buy.mortgageRemaining * this.formGroup.get('buy.mortgageRate').value / 100;
-        housePayment = Math.min(yearlyAvailable, buy.mortgageRemaining); //pay the payments, or whatever's left. TODO: invest the remainder
+        housePayment = Math.min(yearlyAvailable, buy.mortgageRemaining); //pay the payments, or whatever's left.
         buy.mortgageRemaining = buy.mortgageRemaining + mortgageInterest - (yearlyMortgage);
       }else{ //mortgage is paid! Start investing
         housePayment = 0;
