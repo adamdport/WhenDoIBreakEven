@@ -31,8 +31,7 @@ export class RentOrBuyComponent implements OnInit {
     this.formGroup = this.fb.group({
       common: this.fb.group({
         downPayment: 10000,
-        inflation: 2,
-        runtime: 40
+        inflation: 2
       }),
       rent: this.fb.group({
         rent: 800,
@@ -111,9 +110,7 @@ export class RentOrBuyComponent implements OnInit {
     let yearlyMortgage = this.getMortgagePayment() * 12;
 
     let buy ={
-      // We inaccurately charge realtor fees immediately to make the chart's intersection more meaningful.
-      // In reality, they'd be charged when the home sells. TODO: with inflation, is this inaccurate?
-      total: this.formGroup.get('common.downPayment').value - this.getYearlyFromPercents(price, ['buy.realtorFees']),
+      total: this.formGroup.get('common.downPayment').value,
       mortgageRemaining: price - this.formGroup.get('common.downPayment').value + this.getYearlyFromPercents(price, ['buy.closingCosts']),
       investmentTotal: 0,
       data: [],
@@ -121,23 +118,24 @@ export class RentOrBuyComponent implements OnInit {
     let breakEvenData = [];
     this.lineChartLabels = [];
     this.breakEvenAge = undefined;
-    let runtime = this.formGroup.get('common.runtime').value;
 
-    for(let age = 1; age < runtime + 1; age++){
+    this.lineChartLabels.push(0);
+    rent.data.push(rent.total);
+    buy.data.push(buy.total);
+    breakEvenData.push(null);
+
+    for(let age = 1; age < 50; age++){
       this.lineChartLabels.push(age);
 
       //RENT:
-      rent.data.push(rent.total);
       rent.inflationAdjustedRent = rent.inflationAdjustedRent * inflation;
       rent.total = rent.total
         + (rent.total * (this.formGroup.get('rent.interest').value / 100)) // investment interest
         + (yearlyAvailable) // available income
         - (rent.inflationAdjustedRent * 12); // rent
-
-
+      rent.data.push(rent.total);
 
       //BUY:
-      buy.data.push(buy.total);
       let investmentInterest = 0;
       let housePayment;
       let mortgageInterest = 0;
@@ -163,11 +161,18 @@ export class RentOrBuyComponent implements OnInit {
       yearlyAvailable = yearlyAvailable * inflation;
       price = price * inflation;
 
-      if (!this.breakEvenAge && buy.total > rent.total){
+      let buyTotalMinusSellingCosts = buy.total - this.getYearlyFromPercents(price, ['buy.realtorFees']);
+      buy.data.push(buyTotalMinusSellingCosts); //assume they just sold the house and subtract realtor fees
+
+      if (!this.breakEvenAge && (buyTotalMinusSellingCosts > rent.total)){
         this.breakEvenAge = age;
-        breakEvenData.push(buy.total);
+        breakEvenData.push(buyTotalMinusSellingCosts);
       }else{
         breakEvenData.push(null);
+      }
+
+      if(this.breakEvenAge && (age-this.breakEvenAge === 3)){
+        break;
       }
     }
     this.lineChartData = [
