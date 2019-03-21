@@ -127,6 +127,7 @@
     <div class="spacer" fxFlex></div>
     <h1 fxFlex *ngIf="breakEvenAge">You'll break even after {{breakEvenAge}} years</h1>
     <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>
+    <share-button [formGroup]="formGroup"></share-button>
     <canvas baseChart
             [datasets]="lineChartData"
             [labels]="lineChartLabels"
