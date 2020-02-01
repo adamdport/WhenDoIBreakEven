@@ -1,0 +1,220 @@
+<h1>Vehicles are expensive.  Could you taken an Uber everywhere? When do you break even?</h1>
+<common-layout (build)="buildChart()">
+  <div common [formGroup]="formGroup.get('common')">
+    <div>
+      <label>How many days a week do you work?</label>
+      <mat-form-field>
+        <input matInput type="number" formControlName="workPerWeek"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How many days a week do you need to run errands (groceries, events, etc)?</label>
+      <mat-form-field>
+        <input matInput type="number" formControlName="errandsPerWeek"/>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div first [formGroup]="formGroup.get('drive')">
+    <h3>Path A: Buy a car</h3>
+    <div [formGroup]="formGroup.get('drive.payment')">
+      <div>
+        <label>How much does the car cost?</label>
+        <mat-radio-group formControlName="buyOrLease">
+          <mat-radio-button [value]="PaymentType.BUY">Buy</mat-radio-button>
+          <mat-radio-button [value]="PaymentType.LEASE">Lease</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <ng-container *ngIf="formGroup.get('drive.payment.buyOrLease')?.value === PaymentType.BUY">
+        <mat-radio-group formControlName="cashOrFinance">
+          <mat-radio-button [value]="BuyType.CASH">Cash</mat-radio-button>
+          <mat-radio-button [value]="BuyType.FINANCE">Finance</mat-radio-button>
+        </mat-radio-group>
+
+        <div *ngIf="formGroup.get('drive.payment.cashOrFinance')?.value === BuyType.CASH">
+          <label>What is the total cost of the car?</label>
+          <mat-form-field>
+            <div matPrefix>$</div>
+            <input matInput type="number" formControlName="cashCost"/>
+          </mat-form-field>
+        </div>
+
+        <ng-container *ngIf="formGroup.get('drive.payment.cashOrFinance')?.value === BuyType.FINANCE">
+          <div>
+            <label>How much did you put down?</label>
+            <mat-form-field>
+              <div matPrefix>$</div>
+              <input matInput type="number" formControlName="financeDown"/>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <label>What's your monthly payment?</label>
+            <mat-form-field>
+              <div matPrefix>$</div>
+              <input matInput type="number" formControlName="financePayment"/>
+              <div matSuffix>/mo</div>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <label>What is the duration of your loan?</label>
+            <mat-form-field>
+              <input matInput type="number" formControlName="financeDuration"/>
+              <div matSuffix>years</div>
+            </mat-form-field>
+          </div>
+        </ng-container>
+      </ng-container>
+      <div *ngIf="formGroup.get('drive.payment.buyOrLease')?.value === PaymentType.LEASE">
+        <label>What's your monthly payment?</label>
+        <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="leaseCost"/>
+          <div matSuffix>/mo</div>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div>
+      <label>What mileage does it get on average?</label>
+      <mat-form-field>
+        <input matInput type="number" formControlName="mileage"/>
+        <div matSuffix>mpg</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How much does gas cost?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="costPerGallon" min="2" max="5"/>
+          <div matSuffix>/gallon</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How far is it one-way to work?</label>
+      <mat-form-field>
+          <input matInput type="number" formControlName="distanceToWork"/>
+          <div matSuffix>miles</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How far is it one-way, on average, to errands?</label>
+      <mat-form-field>
+          <input matInput type="number" formControlName="distanceToErrands"/>
+          <div matSuffix>miles</div>
+      </mat-form-field>
+    </div>
+
+    
+
+    <div>
+      <label>How much is insurance?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="insurance"/>
+          <div matSuffix>/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How much is upkeep?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="upkeep"/>
+          <div matSuffix>/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How much is vehicle registration where you live?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="registration"/>
+          <div matSuffix>/year</div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How much does it cost to get it inspected?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="inspection"/>
+          <div matSuffix>/year</div>
+      </mat-form-field>
+    </div>
+
+
+    <div>
+      <label>How much does parking cost at work?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="workParking"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How much does parking cost when running errands?</label>
+      <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="errandParking"/>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div second [formGroup]="formGroup.get('uber')">
+    <h3>Path B: Take an Uber everywhere</h3>
+
+    <div>
+      <label>How much does it cost one-way to work?</label>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="costToWork"/>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <label>How much is a one-way ride to everything else (groceries, events, etc) on average?</label>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="costToErrands"/>
+      </mat-form-field>
+    </div>
+
+
+    <div>
+      <label>Sometimes you take longer trips where Uber wouldn't make sense. How much would it cost on average for a rental car for a trip?</label>
+      <mat-form-field>
+        <div matPrefix>$</div>
+        <input matInput type="number" formControlName="rentalForTrip"/>
+      </mat-form-field>
+    </div>
+
+
+    <div>
+      <label>How often do you take those trips?</label>
+      <mat-form-field>
+        <input matInput type="number" formControlName="tripsPerYear"/>
+        <div matSuffix>/year</div>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+  <div chart *ngIf="lineChartData.length" fxLayout="column" fxLayoutAlign="center center">
+    <div class="spacer" fxFlex></div>
+    <h1 fxFlex *ngIf="breakEvenAge">You'll break even after {{breakEvenAge}} years</h1>
+    <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>
+    <canvas baseChart
+            [datasets]="lineChartData"
+            [labels]="lineChartLabels"
+            [options]="{responsive: true}"
+            chartType="line">
+    </canvas>
+  </div>
+
+</common-layout>
