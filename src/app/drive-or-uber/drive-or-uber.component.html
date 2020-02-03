@@ -41,13 +41,6 @@
         </div>
 
         <ng-container *ngIf="formGroup.get('drive.payment.cashOrFinance')?.value === BuyType.FINANCE">
-          <div>
-            <label>How much did you put down?</label>
-            <mat-form-field>
-              <div matPrefix>$</div>
-              <input matInput type="number" formControlName="financeDown"/>
-            </mat-form-field>
-          </div>
 
           <div>
             <label>What's your monthly payment?</label>
@@ -67,6 +60,13 @@
           </div>
         </ng-container>
       </ng-container>
+      <div *ngIf="formGroup.get('drive.payment.buyOrLease')?.value === PaymentType.LEASE || formGroup.get('drive.payment.cashOrFinance')?.value === BuyType.FINANCE">
+        <label>How much did you put down?</label>
+        <mat-form-field>
+          <div matPrefix>$</div>
+          <input matInput type="number" formControlName="financeDown"/>
+        </mat-form-field>
+      </div>
       <div *ngIf="formGroup.get('drive.payment.buyOrLease')?.value === PaymentType.LEASE">
         <label>What's your monthly payment?</label>
         <mat-form-field>

@@ -54,7 +54,7 @@ export class DriveOrUberComponent implements OnInit {
         costToWork: 10,
         costToErrands: 10,
         rentalForTrip: 200,
-        tripsPerYear: 6
+        tripsPerYear: 2
       })
     })
   }
@@ -65,38 +65,103 @@ export class DriveOrUberComponent implements OnInit {
     })
   }
 
+  getBuyCost(mode: 'upFront' | 'monthly' = 'monthly', year: number = 0){
+    const payment = this.formGroup.get('drive.payment').value;
+    let upFront;
+    let monthly; 
+    //buy
+    if (payment.buyOrLease === PaymentType.BUY){
+
+      //cash
+      if (payment.cashOrFinance === BuyType.CASH){
+        upFront = payment.cashCost;
+        monthly = 0;
+      }
+
+      //finance
+      else{
+        upFront = payment.financeDown;
+        monthly = year < payment.financeDuration ? payment.financePayment : 0;
+      }
+    }
+    
+    //lease
+    else {
+      upFront = payment.financeDown;
+      monthly = payment.leaseCost;
+    }
+
+    return mode === 'upFront' ? upFront : monthly;
+  }
+  
+  getYearlyUberCost(){
+    const form = this.formGroup.value;
+    const workCostPerWeek = form.uber.costToWork * 2 * form.common.workPerWeek;
+    const errandsCostPerWeek = form.uber.costToErrands * 2 * form.common.errandsPerWeek;
+    
+    const tripsCostPerYear = form.uber.rentalForTrip * form.uber.tripsPerYear;
+
+    return ((workCostPerWeek + errandsCostPerWeek)*52) + tripsCostPerYear;
+  }
+
+  getYearlyBuyCost(yearNumber: number){
+    const getYearlyGasCosts = () => {
+      const workMilesPerWeek = form.common.workPerWeek * form.drive.distanceToWork;
+      const errandsMilesPerWeek = form.common.errandsPerWeek * form.drive.distanceToWork;
+      /* Yearly trips don't need to be added here. We assume their rental in the uber scenario gets the same mpg
+           as their buy scenario car*/
+
+      return ((workMilesPerWeek + errandsMilesPerWeek)/form.drive.mileage) * 52 * form.drive.costPerGallon;
+    };
+
+    const getYearlyOtherCosts = () => {
+      const workParkingPerYear = form.common.workPerWeek * 52 * form.drive.workParking;
+      const errandParkingPerYear = form.common.errandsPerWeek * 52 * form.drive.errandParking;
+      return workParkingPerYear + errandParkingPerYear + form.drive.insurance + form.drive.upkeep + form.drive.registration + form.drive.inspection;
+    }
+
+    const form = this.formGroup.value;
+    const carPayment = this.getBuyCost('monthly',yearNumber);
+    const gas = getYearlyGasCosts();
+    const other = getYearlyOtherCosts();
+
+    return carPayment + gas + other;
+  }
+
   buildChart(){
-    // let inefficient={
-    //   total: this.formGroup.get('inefficient.cost').value,
-    //   data: [],
-    // }
-    // let efficient ={
-    //   total: this.formGroup.get('efficient.cost').value,
-    //   data: [],
-    // }
-    // let breakEvenData = [];
-    // this.lineChartLabels = [];
-    // this.breakEvenAge = undefined;
 
-    // for(let age = 0; age < 30; age++){
-    //   this.lineChartLabels.push(age);
-    //   inefficient.data.push(inefficient.total);
-    //   efficient.data.push(efficient.total);
-    //   if (!this.breakEvenAge && efficient.total < inefficient.total){
-    //     this.breakEvenAge = age;
-    //     breakEvenData.push(efficient.total);
-    //   }else{
-    //     breakEvenData.push(null);
-    //   }
+    let drive= {
+      total: this.getBuyCost('upFront'),
+      monthsRemaining: this.formGroup.get('drive.payment.financeDuration').value * 12,
+      data: [],
+    }
+    let uber = {
+      total: 0,
+      data: [],
+    }
+    let breakEvenData = [];
+    this.lineChartLabels = [];
+    this.breakEvenAge = undefined;
 
-    //   inefficient.total = inefficient.total + this.getAnnualFuelCost(this.formGroup.get('inefficient.mileage').value);
-    //   efficient.total = efficient.total + this.getAnnualFuelCost(this.formGroup.get('efficient.mileage').value);
-    // }
-    // this.lineChartData = [
-    //   {data: efficient.data, label: 'Efficient Car'},
-    //   {data: inefficient.data, label: 'Cheaper Car'},
-    //   {data: breakEvenData, label: 'Break Even Age', pointRadius: 20}
-    // ];
+    for(let age = 0; age < 30; age++){
+      this.lineChartLabels.push(age);
+      drive.data.push(drive.total);
+      uber.data.push(uber.total);
+      if (!this.breakEvenAge && uber.total > drive.total){
+        this.breakEvenAge = age;
+        breakEvenData.push(uber.total);
+      }else{
+        breakEvenData.push(null);
+      }
+
+      drive.total = drive.total + this.getYearlyBuyCost(age);
+      uber.total = uber.total + this.getYearlyUberCost();
+    }
+    this.lineChartData = [
+      {data: uber.data, label: 'Take an Uber everywhere'},
+      {data: drive.data, label: 'Buy a car'},
+      {data: breakEvenData, label: 'Break Even Age', pointRadius: 20}
+    ];
   }
 
 }
