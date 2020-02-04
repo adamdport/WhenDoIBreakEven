@@ -206,6 +206,8 @@
 
 
   <div chart *ngIf="lineChartData.length" fxLayout="column" fxLayoutAlign="center center">
+    <div>Buying a car, you'll spend {{calculated.buy.gas | currency}} on gas just to work and errands, and {{calculated.buy.otherCosts | currency}} on parking, insurance, upkeep, registration and inspection.</div>
+    <div>If you Uber everywhere, you'll spend {{calculated.uber | currency}} per year, not including rentals for trips!</div>
     <div class="spacer" fxFlex></div>
     <h1 fxFlex *ngIf="breakEvenAge">You'll break even after {{breakEvenAge}} years</h1>
     <h1 fxFlex *ngIf="!breakEvenAge">You never break even.</h1>

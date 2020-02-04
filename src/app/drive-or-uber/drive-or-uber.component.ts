@@ -23,6 +23,14 @@ export class DriveOrUberComponent implements OnInit {
   PaymentType = PaymentType;
   BuyType = BuyType;
 
+  calculated = {
+    buy: {
+      gas: null,
+      otherCosts: null
+    },
+    uber: null
+  };
+
   constructor( private fb: FormBuilder ) {
     this.formGroup = this.fb.group({
       common: this.fb.group({
@@ -101,13 +109,14 @@ export class DriveOrUberComponent implements OnInit {
     
     const tripsCostPerYear = form.uber.rentalForTrip * form.uber.tripsPerYear;
 
-    return ((workCostPerWeek + errandsCostPerWeek)*52) + tripsCostPerYear;
+    const uberCostPerYear = this.calculated.uber = ((workCostPerWeek + errandsCostPerWeek)*52);
+    return uberCostPerYear + tripsCostPerYear;
   }
 
   getYearlyBuyCost(yearNumber: number){
     const getYearlyGasCosts = () => {
-      const workMilesPerWeek = form.common.workPerWeek * form.drive.distanceToWork;
-      const errandsMilesPerWeek = form.common.errandsPerWeek * form.drive.distanceToWork;
+      const workMilesPerWeek = form.common.workPerWeek * form.drive.distanceToWork * 2;
+      const errandsMilesPerWeek = form.common.errandsPerWeek * form.drive.distanceToWork * 2;
       /* Yearly trips don't need to be added here. We assume their rental in the uber scenario gets the same mpg
            as their buy scenario car*/
 
@@ -121,15 +130,14 @@ export class DriveOrUberComponent implements OnInit {
     }
 
     const form = this.formGroup.value;
-    const carPayment = this.getBuyCost('monthly',yearNumber);
-    const gas = getYearlyGasCosts();
-    const other = getYearlyOtherCosts();
+    const carPayment = this.getBuyCost('monthly',yearNumber) * 12;
+    const gas = this.calculated.buy.gas = getYearlyGasCosts();
+    const other = this.calculated.buy.otherCosts = getYearlyOtherCosts();
 
     return carPayment + gas + other;
   }
 
   buildChart(){
-
     let drive= {
       total: this.getBuyCost('upFront'),
       monthsRemaining: this.formGroup.get('drive.payment.financeDuration').value * 12,
